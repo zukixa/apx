@@ -1,3 +1,18 @@
+# TODO:
+- Proxy verification via optional passed-in target url
+- https://docs.proxyscrape.com
+- http://pubproxy.com/api/proxy
+- https://hasdata.com/free-proxy-list
+- https://getproxylist.com
+- https://gimmeproxy.com/#how
+- https://www.proxy-list.download/api/v1
+- In-cache storage of valid proxies to avoid re-searching for further proxies
+- Automatic refills @ failure
+- Passive refills (if possible, somehow)
+  
+
+
+
 # Free-proxy
 
 ## Get free working proxy from <https://www.sslproxies.org/>, <https://www.us-proxy.org/>, <https://free-proxy-list.net/uk-proxy.html> and <https://free-proxy-list.net> and use it in your script
