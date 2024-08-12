@@ -1,17 +1,8 @@
 # TODO:
-- Proxy verification via optional passed-in target url
-- https://docs.proxyscrape.com
-- http://pubproxy.com/api/proxy
-- https://hasdata.com/free-proxy-list
-- https://getproxylist.com
-- https://gimmeproxy.com/#how
-- https://www.proxy-list.download/api/v1
+
 - In-cache storage of valid proxies to avoid re-searching for further proxies
 - Automatic refills @ failure
 - Passive refills (if possible, somehow)
-  
-
-
 
 # Free-proxy
 
@@ -143,6 +134,7 @@ proxy = FreeProxy(country_id=['US', 'BR'], timeout=0.3, rand=True).get()
 If there are no working proxies with provided parameters script raises `FreeProxyException` with `There are no working proxies at this time.` message.
 
 - **Async usage**
+
 ```
 import asyncio
 from fp import FreeProxy
@@ -151,7 +143,7 @@ async def get_with_params():
     proxy = FreeProxy(country_id=['US'], timeout=1.0, rand=True)
     working_proxy = await FreeProxy().get()
     print(f"Working proxy: {working_proxy}")
-    
+
 or
 
 async def get_with_params():
@@ -163,7 +155,6 @@ asyncio.run(get_with_params())
 
 
 ```
-
 
 ## CHANGELOG
 
