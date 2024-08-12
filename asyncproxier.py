@@ -4,16 +4,17 @@ import asyncio
 import re
 import random
 import lxml.html as lh
-class AsyncProxyParser:
-    def __init__(self, country_id=None, timeout=0.5, rand=False, anonym=False, elite=False, google=None, https=False, verify_url=None):
+class AsyncProxier:
+    def __init__(self, country_id=None, timeout=0.5, anonym=False, elite=False, google=None, https=False, verify_url=None):
         self.country_id = country_id
         self.timeout = timeout
-        self.random = rand
         self.anonym = anonym
         self.elite = elite
         self.google = google
         self.schema = 'https' if https else 'http'
         self.verify_url = 'www.google.com' if not verify_url else verify_url.split('://')[1]
+        self.current_proxy = None
+        
     async def __check_if_proxy_is_working(self, session, proxies):
         url = f'{self.schema}://{self.verify_url}'
         try:
@@ -91,8 +92,7 @@ class AsyncProxyParser:
         pl = await self.proxylist()
         fp = await self.freeproxy()
         proxy_list = ps + pl + fp
-        if self.random:
-            random.shuffle(proxy_list)
+        random.shuffle(proxy_list)
         working_proxy = None
         async with aiohttp.ClientSession() as session:
             for proxy_address in proxy_list:
@@ -100,7 +100,14 @@ class AsyncProxyParser:
                 try:
                     working_proxy = await self.__check_if_proxy_is_working(session, proxies)
                     if working_proxy:
+                        self.current_proxy = working_proxy
                         return working_proxy
                 except:
                     continue
         raise Exception('There are no working proxies at this time.')
+    
+    async def update(self, refresh_needed=False):
+        if refresh_needed or not self.current_proxy:
+            self.current_proxy = await self.get()
+        return self.current_proxy
+    
