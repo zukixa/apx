@@ -1,8 +1,3 @@
-# TODO:
-
-- put on pip
-- polish the github repo
-
 # AsyncProxier: Asynchronous Free Proxy Fetcher
 
 [![PyPI](https://img.shields.io/pypi/v/asyncproxier)](https://pypi.org/project/apx/)
