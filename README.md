@@ -1,6 +1,6 @@
 # AsyncProxier: Asynchronous Free Proxy Fetcher
 
-[![PyPI](https://img.shields.io/pypi/v/asyncproxier)](https://pypi.org/project/apx/)
+[![PyPI](https://img.shields.io/pypi/v/asyncproxier)](https://pypi.org/project/apxr/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 AsyncProxier is a Python library that fetches and validates free proxies asynchronously. It scrapes proxies from multiple sources, checks their validity, and provides you with a working proxy that matches your specified criteria.
@@ -16,13 +16,13 @@ AsyncProxier is a Python library that fetches and validates free proxies asynchr
 ## Installation
 
 ```bash
-pip install apx
+pip install apxr
 ```
 
 ## Usage
 
 ```python
-from apx import AsyncProxier
+from apxr import AsyncProxier
 import asyncio
 import httpx
 
