@@ -48,44 +48,42 @@ class AsyncProxier:
         ).lower() == 'yes'
         return country_criteria and elite_criteria and anonym_criteria and google_criteria and https_criteria
     async def freeproxy(self):
-        async with AsyncSession() as sesh:
-            urls = [
-                'https://www.sslproxies.org/',
-                'https://free-proxy-list.net/uk-proxy.html',
-                'https://www.us-proxy.org',
-                'https://free-proxy-list.net'
-            ]
-            r = await sesh.get(random.choice(urls))
-            doc = lh.fromstring(r.text)
+        urls = [
+            'https://www.sslproxies.org/',
+            'https://free-proxy-list.net/uk-proxy.html',
+            'https://www.us-proxy.org',
+            'https://free-proxy-list.net'
+        ]
+        async with aiohttp.ClientSession() as session:
+            r = await session.get(random.choice(urls))
+            doc = lh.fromstring(await r.text())
             tr_elements = doc.xpath('//*[@id="list"]//tr')
             proxies = [f'{tr_elements[i][0].text_content()}:{tr_elements[i][1].text_content()}'
                         for i in range(1, len(tr_elements)) if self.__criteria(tr_elements[i])]
             return proxies
 
     async def proxyscrape(self):
-        async with AsyncSession() as sesh:
-            params = {
-                'request': 'displayproxies',
-                'protocol': self.schema,
-                'timeout': self.timeout * 1000 if self.timeout else '10000',
-                'country': self.country_id if self.country_id else 'all',
-                'ssl': 'all',
-                'anonymity': 'elite' if self.anonym else 'all'
-            }
-            r = await sesh.post('https://api.proxyscrape.com/v2/', params=params)
-            return ((r.text).strip()).replace('\r', '').split('\n')
-        
+        params = {
+            'request': 'displayproxies',
+            'protocol': self.schema,
+            'timeout': self.timeout * 1000 if self.timeout else '10000',
+            'country': self.country_id if self.country_id else 'all',
+            'ssl': 'all',
+            'anonymity': 'elite' if self.anonym else 'all'
+        }
+        async with aiohttp.ClientSession() as session:
+            r = await session.post('https://api.proxyscrape.com/v2/', params=params)
+            return (await r.text()).strip().replace('\r', '').split('\n')
+
     async def proxylist(self):
-        async with AsyncSession() as sesh:
-            params = {
-                'type': self.schema
-            }
-            if self.country_id:
-                params['country'] = self.country_id
-            if self.anonym:
-                params['anonymity'] = 'elite' 
-            r = await sesh.get('https://www.proxy-list.download/api/v1/get', params=params)
-            return ((r.text).strip()).replace('\r', '').split('\n')
+        params = {
+            'type': self.schema,
+            'country': self.country_id if self.country_id else 'none',
+            'anonymity': 'elite' if self.anonym else 'none'
+        }
+        async with aiohttp.ClientSession() as session:
+            r = await session.get('https://www.proxy-list.download/api/v1/get', params=params)
+            return (await r.text()).strip().replace('\r', '').split('\n')
 
     async def get(self):
         """Returns a working proxy that matches the specified parameters."""
