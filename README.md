@@ -24,7 +24,7 @@ pip install apxr
 ```python
 from apxr import AsyncProxier
 import asyncio
-import httpx
+from curl_cffi.requests import AsyncSession
 
 async def main():
     # Initialize the proxier with desired settings
@@ -33,11 +33,10 @@ async def main():
     # Get an initial working proxy
     proxy = await proxier.get()
     print(f"Initial working proxy: {proxy}")
-
     # Main usage of this client.
     for i in range(80):
         # Perform the HTTP request using the last working proxy.
-        async with httpx.AsyncClient(proxies=(await proxier.update())) as sesh:
+        async with AsyncSession(proxy=await proxier.update()) as sesh:
             try:
                 response = await sesh.get('https://www.google.com')
                 if response.status_code == 200:
